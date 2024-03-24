@@ -4,6 +4,7 @@ use App\Exceptions\AppError;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Validation\ValidationException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -17,7 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $error){
-            //validar se o erro é criado pelo app
+            //verifica se é um erro de validação de app/requests
+            if ($error instanceof ValidationException) {
+                return response()->json([
+                    'errors' => $error->validator->errors()
+                ], 422);
+            };
+            //verifica se o erro é criado pelo app
             if ($error instanceof AppError) {
                 return response()->json([
                     'errors' => $error->getMessage()

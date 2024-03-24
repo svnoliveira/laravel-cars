@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\owners;
 
 use App\Exceptions\AppError;
 use App\Models\Owner;
 
-
-use function PHPUnit\Framework\isNull;
 
 class CreateOwnerService {
     public function excecute(array $data){

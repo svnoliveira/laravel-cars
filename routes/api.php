@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\{LoginController, OwnerController};
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/user', function (Request $request) {
@@ -8,3 +8,4 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 Route::post('/owners', [OwnerController::class, 'create']);
+Route::post('/auth/login', [LoginController::class, 'login']);
