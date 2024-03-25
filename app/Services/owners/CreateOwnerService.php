@@ -7,7 +7,7 @@ use App\Models\Owner;
 
 
 class CreateOwnerService {
-    public function excecute(array $data){
+    public function execute(array $data){
         $ownerFound = Owner::firstWhere('email', $data['email']);
         //user already exist?
         if (!is_null($ownerFound)){

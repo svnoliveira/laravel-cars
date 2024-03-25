@@ -2,14 +2,19 @@
 
 namespace App\Http\Requests\owners;
 
+use App\Exceptions\AppError;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateOwnerRequest extends FormRequest
+class UpdateOwnerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool {
+        $ownerId = $this->route('id');
+        if (auth()->user()->id != $ownerId){
+            throw new AppError('Usuário não autorizado', 403);
+        };
         return true;
     }
 
@@ -20,20 +25,17 @@ class CreateOwnerRequest extends FormRequest
      */
     public function rules(): array {
         return [
-            'email'=> ['required', 'email'],
-            'name' => ['required', 'min:4'],
-            'password' => ['required', 'min:4'],
+            'email'=> ['sometimes', 'email'],
+            'name' => ['sometimes', 'min:4'],
+            'password' => ['sometimes', 'min:4'],
             'age' => ['sometimes', 'integer', 'gte:18'],
         ];
     }
 
     public function messages(): array {
         return [
-            'email.required' => 'Email é obrigatório',
             'email.email' => 'Email deve ser um endereço válido',
-            'name.required' => 'Nome é obrigatório',
             'name.min' => 'O nome deve ter ao menos 4 caracteres',
-            'password.required' => 'Senha é obrigatória',
             'password.min' => 'A senha deve ter ao menos 4 caracteres',
             'age.integer' => 'A idade deve ser um número inteiro',
             'age.gte' => 'A idade deve ser ao menos 18 para ser dono de um carro.'
